@@ -38,7 +38,7 @@ public class DateUtils {
 		List<ColumnEntity> listcloumnEntity=new ArrayList<ColumnEntity>();
 		try {
 			Connection conn = getConnection(url,user,pass);
-			String sql = "SELECT * FROM " + aTableName+" WHERE 1=2";// 只要一行就够了
+			String sql = "SELECT * FROM " + aTableName+" WHERE 1=2";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			ResultSet rs = stmt.executeQuery(sql);
 			ResultSetMetaData data = rs.getMetaData();
