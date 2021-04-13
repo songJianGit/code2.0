@@ -14,7 +14,7 @@ import com.entity.ColumnEntity;
 /**
  * @creator     songJian
  * @version 2016-9-2
- * @category »ñÈ¡±í¸ñÊı¾İ
+ * @category è·å–è¡¨æ ¼æ•°æ®
  * */
 public class DateUtils {
 	
@@ -22,7 +22,7 @@ public class DateUtils {
 	private static Connection getConnection(String url,String user,String pass) {
 		Connection conn = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");// °Ñ×Ô¼º×¢²áµ½DriverManagerÖĞÈ¥£¨java.sql.DriverManager.registerDriver(new Driver())£©
+			Class.forName("com.mysql.jdbc.Driver");// æŠŠè‡ªå·±æ³¨å†Œåˆ°DriverManagerä¸­å»ï¼ˆjava.sql.DriverManager.registerDriver(new Driver())ï¼‰
 			conn = DriverManager.getConnection(url, user, pass);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -38,7 +38,7 @@ public class DateUtils {
 		List<ColumnEntity> listcloumnEntity=new ArrayList<ColumnEntity>();
 		try {
 			Connection conn = getConnection(url,user,pass);
-			String sql = "SELECT * FROM " + aTableName+" LIMIT 0,1";// Ö»ÒªÒ»ĞĞ¾Í¹»ÁË
+			String sql = "SELECT * FROM " + aTableName+" WHERE 1=2";// åªè¦ä¸€è¡Œå°±å¤Ÿäº†
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			ResultSet rs = stmt.executeQuery(sql);
 			ResultSetMetaData data = rs.getMetaData();
@@ -46,50 +46,51 @@ public class DateUtils {
 			DatabaseMetaData dbMeta =conn.getMetaData(); 
 			ResultSet rsm =dbMeta.getPrimaryKeys(null, null, aTableName);  
 			while( rsm.next() ) { 
-				CacheDataUtils.keyList.add(String.valueOf(rsm.getObject(4)));// Ö÷¼ü¼¯ºÏ
+				CacheDataUtils.keyList.add(String.valueOf(rsm.getObject(4)));// ä¸»é”®é›†åˆ
 			} 
 			
 			for (int i = 1; i <= data.getColumnCount(); i++) {
 				ColumnEntity e=new ColumnEntity();
-				// »ñµÃÖ¸¶¨ÁĞµÄÁĞÃû
+				// è·å¾—æŒ‡å®šåˆ—çš„åˆ—å
 				e.setColumnName(data.getColumnName(i));
-				// »ñµÃÖ¸¶¨ÁĞµÄÊı¾İÀàĞÍ
+				// è·å¾—æŒ‡å®šåˆ—çš„æ•°æ®ç±»å‹
 				e.setColumnType(data.getColumnType(i));
-				// »ñµÃÖ¸¶¨ÁĞµÄÊı¾İÀàĞÍÃû
+				// è·å¾—æŒ‡å®šåˆ—çš„æ•°æ®ç±»å‹å
 				e.setColumnTypeName(data.getColumnTypeName(i));
-				// ËùÔÚµÄCatalogÃû×Ö
+				// æ‰€åœ¨çš„Catalogåå­—
 				e.setCatalogName(data.getCatalogName(i));
-				// ¶ÔÓ¦Êı¾İÀàĞÍµÄÀà
+				// å¯¹åº”æ•°æ®ç±»å‹çš„ç±»
 				e.setColumnClassName(DataTypeUtils.getJavaType(data.getColumnTypeName(i)));
-				// ÔÚÊı¾İ¿âÖĞÀàĞÍµÄ×î´ó×Ö·û¸öÊı
+				// åœ¨æ•°æ®åº“ä¸­ç±»å‹çš„æœ€å¤§å­—ç¬¦ä¸ªæ•°
 				e.setColumnDisplaySize(data.getColumnDisplaySize(i));
-				// Ä¬ÈÏµÄÁĞµÄ±êÌâ
+				// é»˜è®¤çš„åˆ—çš„æ ‡é¢˜
 				e.setColumnLabel(data.getColumnLabel(i));
-				// »ñµÃÁĞµÄÄ£Ê½
+				// è·å¾—åˆ—çš„æ¨¡å¼
 				e.setSchemaName(data.getSchemaName(i));
-				// Ä³ÁĞÀàĞÍµÄ¾«È·¶È(ÀàĞÍµÄ³¤¶È)
+				// æŸåˆ—ç±»å‹çš„ç²¾ç¡®åº¦(ç±»å‹çš„é•¿åº¦)
 				e.setPrecision(data.getPrecision(i));
-				// Ğ¡ÊıµãºóµÄÎ»Êı
+				// å°æ•°ç‚¹åçš„ä½æ•°
 				e.setScale(data.getScale(i));
-				// »ñÈ¡Ä³ÁĞ¶ÔÓ¦µÄ±íÃû
+				// è·å–æŸåˆ—å¯¹åº”çš„è¡¨å
 				e.setTableName(data.getTableName(i));
-				// ÊÇ·ñ×Ô¶¯µİÔö
+				// æ˜¯å¦è‡ªåŠ¨é€’å¢
 				e.setAutoInctement(data.isAutoIncrement(i));
-				// ÔÚÊı¾İ¿âÖĞÊÇ·ñÎª»õ±ÒĞÍ
+				// åœ¨æ•°æ®åº“ä¸­æ˜¯å¦ä¸ºè´§å¸å‹
 				e.setCurrency(data.isCurrency(i));
-				// ÊÇ·ñÎª¿Õ
+				// æ˜¯å¦ä¸ºç©º
 				e.setIsNullable(data.isNullable(i));
-				// ÊÇ·ñÎªÖ»¶Á
+				// æ˜¯å¦ä¸ºåªè¯»
 				e.setReadOnly(data.isReadOnly(i));
-				// ÄÜ·ñ³öÏÖÔÚwhereÖĞ
+				// èƒ½å¦å‡ºç°åœ¨whereä¸­
 				e.setSearchable(data.isSearchable(i));
 				listcloumnEntity.add(e);
 			}
+			rsm.close();
 			stmt.cancel();
 			rs.close();
 			conn.close();
 		} catch (SQLException e) {
-			System.out.println("Êı¾İ¿âÁ¬½ÓÊ§°Ü");
+			System.out.println("æ•°æ®åº“è¿æ¥å¤±è´¥");
 			e.printStackTrace();
 		}
 		return listcloumnEntity;
